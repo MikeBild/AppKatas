@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<style>
+			table {
+				border: 1px solid black;
+			}
+			table tr td{
+				width: 50px;
+				height: 50px;
+				border: 1px solid black;
+				text-align: center;
+				vertical-align: center;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="board">
+			<table>
+				<tr>
+					<td id="31"></td>
+					<td id="32"></td>
+					<td id="33"></td>
+				</tr>
+				<tr>
+					<td id="21"></td>
+					<td id="22"></td>
+					<td id="23"></td>
+				</tr>
+				<tr>
+					<td id="11"></td>
+					<td id="12"></td>
+					<td id="13"></td>
+				</tr>
+			</table>
+		</div>
+		<div>
+			Round:
+			<div id="round"></div>
+			Player:
+			<div id="player"></div>
+			Situation:
+			<div id="situation"></div>
+			<button id="reset">New Game</button>
+		</div>
+		
+		<script>
+			var checkGameState = function() {
+				var xmlhttp = new XMLHttpRequest();
+				xmlhttp.open("GET", 'http://localhost:9001/status', false);
+				xmlhttp.send(null);
+				if(xmlhttp.status == 200) {
+					return JSON.parse(xmlhttp.responseText);
+				}
+			};
+
+			var game = {
+				emit: function(event){
+					var xmlhttp = new XMLHttpRequest();
+					xmlhttp.open("POST", 'http://localhost:9001/emit', false);
+					xmlhttp.send(JSON.stringify(event));
+				}
+			};
+			
+			function refresh(){
+				var gameState = checkGameState();
+				document.getElementById("situation").innerText = gameState.situation;
+				document.getElementById("round").innerText = gameState.round;
+				elements.forEach(function(element){
+					element.innerText = "";
+				});
+				gameState.turnX.forEach(function(item){
+					document.getElementById(item).innerText = "X";
+				});
+				gameState.turnO.forEach(function(item){
+					document.getElementById(item).innerText = "O";
+				});
+				if(gameState.situation !== "WON") document.getElementById("player").innerText = gameState.player;
+			};
+
+			var elements = Array.prototype.slice.call(document.getElementsByTagName("td"));
+			elements.forEach(function(element){
+				element.addEventListener('click', function(){
+					var gameState = checkGameState();
+					game.emit({ type:'player' + gameState.player, data: { pos: this.id } });
+					refresh();
+				});
+			});
+
+			document.getElementById("reset").addEventListener('click', function(){
+				game.emit({ type:'reset', data: { } });
+				refresh();
+			});
+
+			refresh();
+		</script>
+	</body>
+</html>

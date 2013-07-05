@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<style>
+			table {
+				border: 1px solid black;
+			}
+			table tr td{
+				width: 50px;
+				height: 50px;
+				border: 1px solid black;
+				text-align: center;
+				vertical-align: center;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="board">
+			<table>
+				<tr>
+					<td id="31"></td>
+					<td id="32"></td>
+					<td id="33"></td>
+				</tr>
+				<tr>
+					<td id="21"></td>
+					<td id="22"></td>
+					<td id="23"></td>
+				</tr>
+				<tr>
+					<td id="11"></td>
+					<td id="12"></td>
+					<td id="13"></td>
+				</tr>
+			</table>
+		</div>
+		<div>
+			Round:
+			<div id="round"></div>
+			Player:
+			<div id="player"></div>
+			Situation:
+			<div id="situation"></div>
+		</div>
+		
+		<script>
+			function intersect(a, b){
+			  var ai=0, bi=0;
+			  var result = new Array();
+
+			  while( ai < a.length && bi < b.length )
+			  {
+			     if      (a[ai] < b[bi] ){ ai++; }
+			     else if (a[ai] > b[bi] ){ bi++; }
+			     else /* they're equal */
+			     {
+			       result.push(a[ai]);
+			       ai++;
+			       bi++;
+			     }
+			  }
+
+			  return result;
+			};
+
+			var Aggregate = function(){
+				var events = [];
+				return {
+					when: function(match){
+							state = match.$init ? match.$init : {};
+							for (var i = 0; i < events.length; i++) {
+								if(match[events[i].type] && events[i].data)
+									state = match[events[i].type](state, events[i].data);
+							}
+							return state;
+					},
+					emit: function(event){
+						events.push(event);
+					}
+				}
+			};
+
+			var game = new Aggregate();			
+
+			var checkGameState = function() {
+				var checkWinner = function(playerTurns, solutions){
+					playerTurns.sort();
+					for(var i in solutions){
+						var intersection = intersect(playerTurns, solutions[i]);
+						if(intersection.toString() === solutions[i].toString())
+							return "WON";
+					}
+					if(state.round === 9)
+						return "DRAW";
+					return "RUNNING";
+				};
+
+				var rejectTurn = function(state, event){
+					return state.turnX.concat(state.turnO).indexOf(event.pos) !== -1;
+				};
+
+				return game.when({
+					$init: {
+						player: "X",
+						situation: "START",
+						turnX: [],
+						turnO: [],
+						round: 0,
+						solutions: [
+							[11,12,13],
+							[21,22,23],
+							[31,32,33],
+							[11,22,33],
+							[13,22,31],
+							[11,21,31],
+							[12,22,32],
+							[13,23,33]
+						]
+					},
+					playerX: function(state, event){
+						if(rejectTurn(state, event))
+							return state;
+						
+						state.round++;
+						state.turnX.push(event.pos);
+
+						state.situation = checkWinner(state.turnX, state.solutions);
+						state.player = state.player === "X" ? "O" : "X";
+						return state;
+					},
+					playerO: function(state, event){
+						if(rejectTurn(state, event))
+							return state;
+						
+						state.round++;
+						state.turnO.push(event.pos);
+
+						state.situation = checkWinner(state.turnO, state.solutions);
+						state.player = state.player === "X" ? "O" : "X";
+						return state;
+					}
+				});
+			};
+			
+			function refresh(){
+				var gameState = checkGameState();
+				document.getElementById("situation").innerText = gameState.situation;
+				document.getElementById("round").innerText = gameState.round;
+				gameState.turnX.forEach(function(item){
+					document.getElementById(item).innerText = "X";
+				});
+				gameState.turnO.forEach(function(item){
+					document.getElementById(item).innerText = "O";
+				});
+				if(gameState.situation !== "WON") document.getElementById("player").innerText = gameState.player;
+			};
+
+			var elements = Array.prototype.slice.call(document.getElementsByTagName("td"));
+			elements.forEach(function(element){
+				element.addEventListener('click', function(){
+					var gameState = checkGameState();
+					game.emit({ type:'player' + gameState.player, data: { pos: this.id } });
+					refresh();
+				});
+			});
+			
+			refresh();
+		</script>
+	</body>
+</html>
