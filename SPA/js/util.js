@@ -1,3 +1,4 @@
+"use strict";
 function intersect(a, b){
 	var ai=0, bi=0;
 	var result = [];

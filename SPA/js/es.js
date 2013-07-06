@@ -1,5 +1,7 @@
+"use strict";
 var Aggregate = function(){
-	var events = [];
+	var events = [],
+		state = {};
 	return {
 		when: function(match){
 			state = match.$init ? match.$init : {};

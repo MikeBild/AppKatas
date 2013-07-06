@@ -1,28 +1,38 @@
+"use strict";
 var game = new Aggregate();
 var checkGameState = function() {
-	var addTurn = function(turns, turn){
-		turns.push(turn);
+	var addTurn = function(state, event){
+		return function(turns){
+			turns.push(event.boardPosition);
+			return state;			
+		};
+	};
+	
+	var reviewWon = function(state, event){
+		return function(turns){
+			turns.sort();
+			for(var i in state.solutions){
+				var intersection = intersect(turns, state.solutions[i]);
+				if(intersection.toString() === state.solutions[i].toString())
+					state.situation = "WON";
+			}
+			return state;			
+		};
 	};
 
-	var reviewTurn = function(playerTurns, solutions){
-		playerTurns.sort();
-		for(var i in solutions){
-			var intersection = intersect(playerTurns, solutions[i]);
-			if(intersection.toString() === solutions[i].toString())
-				return "WON";
-		}
-		if(state.round === 9)
-			return "DRAW";
-		return "RUNNING";
+	var reviewDraw = function(state, event){
+		if(state.round === 9 && state.situation !== "WON") state.situation = "DRAW";
+		return state;
 	};
 
 	var isClashedTurn = function(state, event){
 		return state.turnX.concat(state.turnO).indexOf(event.boardPosition) !== -1;
 	};
 
-	var togglePlayer = function(player, situation){
-		if(situation === "WON" || situation === "DRAW") return player;
-		return (player === "X") ? "O" : "X";
+	var togglePlayer = function(state, event){
+		if(state.situation === "WON" || state.situation === "DRAW") return state;
+		state.player = (state.player === "X") ? "O" : "X";
+		return state;
 	};
 
 	return game.when({
@@ -47,19 +57,22 @@ var checkGameState = function() {
 			if(isClashedTurn(state, event)) return state;
 			
 			state.round++;
-			addTurn(state.turnX, event.boardPosition);
-			state.situation = reviewTurn(state.turnX, state.solutions);
-			state.player = togglePlayer(state.player, state.situation);
+			state.situation = "RUNNING";
+			state = addTurn(state, event)(state.turnX);
+			state = reviewWon(state, event)(state.turnX);
+			state = reviewDraw(state, event);
+			state = togglePlayer(state, event);
 			return state;
 		},
 		turnO: function(state, event){
 			if(isClashedTurn(state, event)) return state;
 			
 			state.round++;
-			addTurn(state.turnO, event.boardPosition);
-			state.situation = reviewTurn(state.turnO, state.solutions);
-			state.player = togglePlayer(state.player, state.situation);
-
+			state.situation = "RUNNING";
+			state = addTurn(state, event)(state.turnO);
+			state = reviewWon(state, event)(state.turnO);
+			state = reviewDraw(state, event);
+			state = togglePlayer(state, event);
 			return state;
 		}
 	});

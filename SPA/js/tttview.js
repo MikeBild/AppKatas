@@ -1,3 +1,4 @@
+"use strict";
 (function initGame(){
 	var elements = Array.prototype.slice.call(document.getElementsByTagName("td"));
 	elements.forEach(function(element){
