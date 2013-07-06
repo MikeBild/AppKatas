@@ -21,7 +21,7 @@ function refreshGame(){
 function reviewGame(gameState){
 	if((gameState.situation === "WON" || gameState.situation === "DRAW") 
 		&& confirm("New game?")) {
-		restartGame();
+		game.emit({type:'reset', data: {}});
 		refreshGame();
 	};
 };

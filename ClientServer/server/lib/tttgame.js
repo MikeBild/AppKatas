@@ -1,6 +1,10 @@
+var Aggregate = require("./es").Aggregate,
+	intersect = require("./util");
+
 (function(exports){
 	"use strict";
-	exports.game = new Aggregate();
+	var game = new Aggregate();
+	exports.game = game;
 	exports.checkGameState = function() {
 		var addTurn = function(state, event){
 			return function(turns){
@@ -86,4 +90,4 @@
 			}
 		});
 	};
-})(window);
+})(module.exports);
