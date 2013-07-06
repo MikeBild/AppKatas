@@ -18,6 +18,14 @@ function refreshGame(){
 	reviewGame(gameState);
 };
 
+function reviewGame(gameState){
+	if((gameState.situation === "WON" || gameState.situation === "DRAW") 
+		&& confirm("New game?")) {
+		restartGame();
+		refreshGame();
+	};
+};
+
 function resetBoard(){
 	var elements = Array.prototype.slice.call(document.getElementsByTagName("td"));
 	elements.forEach(function(element){
@@ -39,11 +47,4 @@ function redrawBoard(gameState){
 	gameState.turnO.forEach(function(item){
 		document.getElementById(item).innerText = "O";
 	});
-};
-
-function reviewGame(gameState){
-	if((gameState.situation === "WON" || gameState.situation === "DRAW") 
-		&& confirm("New game?")) {
-		location.reload();
-	};
 };
