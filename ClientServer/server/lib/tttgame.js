@@ -58,7 +58,7 @@ var Aggregate = require("./es").Aggregate,
 					[13,23,33]
 				]
 			},
-			turnX: function(state, event){
+			playedX: function(state, event){
 				if(isClashedTurn(state, event)) return state;
 				
 				state.round++;
@@ -69,7 +69,7 @@ var Aggregate = require("./es").Aggregate,
 				state = togglePlayer(state, event);
 				return state;
 			},
-			turnO: function(state, event){
+			playedO: function(state, event){
 				if(isClashedTurn(state, event)) return state;
 				
 				state.round++;
@@ -80,7 +80,7 @@ var Aggregate = require("./es").Aggregate,
 				state = togglePlayer(state, event);
 				return state;
 			},
-			reset: function(state, event){
+			reseted: function(state, event){
 				state.round = 0;
 				state.turnO = [];
 				state.turnX = [];
