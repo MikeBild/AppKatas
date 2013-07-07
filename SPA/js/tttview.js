@@ -3,7 +3,7 @@
 	var elements = Array.prototype.slice.call(document.getElementsByTagName("td"));
 	elements.forEach(function(element){
 		element.addEventListener('click', function(){
-			game.emit({ type:'played' + checkGameState().player, data: { boardPosition: this.id } });
+			ttt.game.emit({ type:'played' + ttt.checkGameState().player, data: { boardPosition: this.id } });
 			refreshGame();
 		});
 	});
@@ -12,7 +12,7 @@
 })();
 
 function refreshGame(){
-	var gameState = checkGameState();
+	var gameState = ttt.checkGameState();
 	resetBoard();
 	redrawBoard(gameState);
 	reviewGame(gameState);
@@ -21,7 +21,7 @@ function refreshGame(){
 function reviewGame(gameState){
 	if((gameState.situation === "WON" || gameState.situation === "DRAW") 
 		&& confirm("New game?")) {
-		game.emit({type:'reseted', data: {}});
+		ttt.game.emit({type:'reseted', data: {}});
 		refreshGame();
 	};
 };

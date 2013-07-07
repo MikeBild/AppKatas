@@ -1,5 +1,5 @@
+"use strict";
 (function(exports){
-	"use strict";
 	exports.Aggregate = function(){
 		var events = [],
 			state = {};
@@ -17,4 +17,4 @@
 			}
 		}
 	};
-})(window);
+})(window.ES = {});
