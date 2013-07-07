@@ -87,4 +87,4 @@
 			}
 		});
 	};
-})(window.ttt = {});
+})(window.TTT = {});

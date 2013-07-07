@@ -1,6 +1,6 @@
 var http = require("http"),
 	webserver = http.createServer(),
-	game = require("./lib/tttgame");
+	TTT = require("./lib/tttgame").TTT;
 
 webserver.on('request', function(req, res){
 	res.setHeader("access-control-allow-origin","*");
@@ -12,7 +12,7 @@ webserver.on('request', function(req, res){
 	}
 
 	if(req.url === '/status'){
-		var gameState = JSON.stringify(game.checkGameState());
+		var gameState = JSON.stringify(TTT.checkGameState());
 		return res.end(gameState);
 	};
 
@@ -22,7 +22,7 @@ webserver.on('request', function(req, res){
 			body += data;
 		});
 		req.on('end', function() {
-			game.game.emit(JSON.parse(body));
+			TTT.game.emit(JSON.parse(body));
 			return res.end("OK Emit");
 		});
 	};

@@ -1,9 +1,9 @@
-var Aggregate = require("./es").Aggregate,
-	intersect = require("./util");
+"use strict";
+var ES = require('./es').ES,
+	Util = require('./util').Util;
 
 (function(exports){
-	"use strict";
-	var game = new Aggregate();
+	var game = new ES.Aggregate();
 	exports.game = game;
 	exports.checkGameState = function() {
 		var addTurn = function(state, event){
@@ -17,7 +17,7 @@ var Aggregate = require("./es").Aggregate,
 			return function(turns){
 				turns.sort();
 				for(var i in state.solutions){
-					var intersection = intersect(turns, state.solutions[i]);
+					var intersection = Util.intersect(turns, state.solutions[i]);
 					if(intersection.toString() === state.solutions[i].toString())
 						state.situation = "WON";
 				}
@@ -63,10 +63,10 @@ var Aggregate = require("./es").Aggregate,
 				
 				state.round++;
 				state.situation = "RUNNING";
-				state = addTurn(state, event)(state.turnX);
-				state = reviewWon(state, event)(state.turnX);
-				state = reviewDraw(state, event);
-				state = togglePlayer(state, event);
+				addTurn(state, event)(state.turnX);
+				reviewWon(state, event)(state.turnX);
+				reviewDraw(state, event);
+				togglePlayer(state, event);
 				return state;
 			},
 			playedO: function(state, event){
@@ -74,10 +74,10 @@ var Aggregate = require("./es").Aggregate,
 				
 				state.round++;
 				state.situation = "RUNNING";
-				state = addTurn(state, event)(state.turnO);
-				state = reviewWon(state, event)(state.turnO);
-				state = reviewDraw(state, event);
-				state = togglePlayer(state, event);
+				addTurn(state, event)(state.turnO);
+				reviewWon(state, event)(state.turnO);
+				reviewDraw(state, event);
+				togglePlayer(state, event);
 				return state;
 			},
 			reseted: function(state, event){
@@ -90,4 +90,4 @@ var Aggregate = require("./es").Aggregate,
 			}
 		});
 	};
-})(module.exports);
+})(exports.TTT = {});
