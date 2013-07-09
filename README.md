@@ -1,6 +1,17 @@
+-
+Calculator Kata
+====
+Lib - mixed Browser & Node.js module + Event-Sourcing sample
+----
+Tests  
+`cd Calculator`  
+`npm install mocha grunt grunt-mocha-test`  
+`grunt`  
+
+
+-
 TicTacToe Kata
 ====
-
 SPA - Event-Sourcing sample
 ----
 clean sample from [Gist](https://gist.github.com/MikeBild/5926056)
