@@ -1,4 +1,3 @@
--
 Calculator Kata
 ====
 Lib - mixed Browser & Node.js module + Event-Sourcing sample
