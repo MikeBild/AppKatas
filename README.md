@@ -7,6 +7,10 @@ Lib - mixed Browser & Node.js module + Event-Sourcing sample
 `npm install`  
 `npm test` 
 
+SPA
+----
+* open index.html in web browser (tested with Chrome)
+
 -
 TicTacToe Kata
 ====
