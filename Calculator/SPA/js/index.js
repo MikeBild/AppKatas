@@ -1,26 +1,64 @@
 ;(function(e,t,n){function i(n,s){if(!t[n]){if(!e[n]){var o=typeof require=="function"&&require;if(!s&&o)return o(n,!0);if(r)return r(n,!0);throw new Error("Cannot find module '"+n+"'")}var u=t[n]={exports:{}};e[n][0].call(u.exports,function(t){var r=e[n][1][t];return i(r?r:t)},u,u.exports)}return t[n].exports}var r=typeof require=="function"&&require;for(var s=0;s<n.length;s++)i(n[s]);return i})({1:[function(require,module,exports){
-var Calculator = require("../Lib/src/calc").Calc;
+"use strict";
 
-Calculator.fsm.emit({type:"reseted", data: {}});
-Calculator.fsm.emit({type:"enteredNumber", data: {number:"3"}});
-Calculator.fsm.emit({type:"enteredOperation", data: {operation:"+"}});
-Calculator.fsm.emit({type:"enteredNumber", data: {number:"4"}});
-Calculator.fsm.emit({type:"enteredOperation", data: {operation:"*"}});
-Calculator.fsm.emit({type:"enteredNumber", data: {number:"2"}});
-Calculator.fsm.emit({type:"enteredOperation", data: {operation:"/"}});
-Calculator.fsm.emit({type:"enteredNumber", data: {number:"4"}});
-Calculator.fsm.emit({type:"enteredOperation", data: {operation:"-"}});
-Calculator.fsm.emit({type:"enteredNumber", data: {number:"3"}});
-Calculator.fsm.emit({type:"executed", data: {}});
-var calculation = Calculator.evaluateRPNOP();
-console.log(calculation);
-document.getElementById("expression").innerText = calculation.expression;
-document.getElementById("rpn").innerText = calculation.rpn;
-document.getElementById("result").innerText = calculation.result;
+var Calculator = require("../lib/src/calc").Calc;
+(function initCalculator(){	
+	Array.prototype.slice.call(document.getElementsByName("number"))
+		.forEach(function(element){
+			element.addEventListener('click', function(){
+				console.log(this.innerText);
+				Calculator.fsm.emit({ 
+					type:'enteredNumber',
+					data: { number: this.innerText } 
+				});
+				refeshView();
+			});
+		});
+	Array.prototype.slice.call(document.getElementsByName("operator"))
+		.forEach(function(element){
+			element.addEventListener('click', function(){
+				console.log(this.innerText);
+				Calculator.fsm.emit({ 
+					type:'enteredOperation',
+					data: { operation: this.innerText } 
+				});
+				refeshView();
+			});
+		});
+	Array.prototype.slice.call(document.getElementsByName("execute"))
+		.forEach(function(element){
+			element.addEventListener('click', function(){
+				console.log(this.innerText);
+				Calculator.fsm.emit({ 
+					type:'executed',
+					data: {} 
+				});
+				refeshView();
+				Calculator.fsm.emit({type:"reseted", data: {}});
+			});
+		});
+	Array.prototype.slice.call(document.getElementsByName("reset"))
+		.forEach(function(element){
+			element.addEventListener('click', function(){
+				console.log(this.innerText);
+				Calculator.fsm.emit({ 
+					type:'reseted',
+					data: { } 
+				});
+				refeshView();
+			});
+		});
 
+})();
 
-
-},{"../Lib/src/calc":2}],2:[function(require,module,exports){
+var refeshView = function(){
+	var calculation = Calculator.evaluateRPNOP();
+	document.getElementById("expression").innerText = calculation.expression;
+	document.getElementById("rpn").innerText = calculation.rpn;
+	document.getElementById("result").innerText = calculation.result;
+	document.getElementById("io").value = calculation.result ? calculation.result : calculation.expression;
+}
+},{"../lib/src/calc":2}],2:[function(require,module,exports){
 "use strict";
 var ES = require('./es').ES;
 

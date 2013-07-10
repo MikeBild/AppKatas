@@ -2,9 +2,44 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Browser Example</title>
+  <title>Calculator Example</title>
+  <link href="css/style.css" media="all" rel="stylesheet" type="text/css" />
 </head>
 <body>
+	<div id="calculator">
+		<table>
+			<tr>
+				<td colspan="4"><input type="text" id="io"></input></td>
+			</tr>
+			</tr>
+				<td colspan="3" name="reset">C</td>
+				<td name="operator">+</td>
+			</tr>
+			<tr>
+				<td name="number">7</td>
+				<td name="number">8</td>
+				<td name="number">9</td>
+				<td name="operator">-</td>
+			</tr>
+			<tr>
+				<td name="number">4</td>
+				<td name="number">5</td>
+				<td name="number">6</td>
+				<td name="operator">*</td>
+			</tr>
+			<tr>
+				<td name="number">1</td>
+				<td name="number">2</td>
+				<td name="number">3</td>
+				<td name="operator">/</td>
+			</tr>
+			<tr>
+				<td name="number">0</td>
+				<td name="point">.</td>
+				<td colspan="2" name="execute">=</td>
+			</tr>
+		</table>
+	</div>
 	Expression:
 	<div id="expression"></div>
 	Reverse Polish Notation:
