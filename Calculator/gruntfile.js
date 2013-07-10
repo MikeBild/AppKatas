@@ -12,7 +12,7 @@ module.exports = function(grunt) {
         options: {
           reporter: 'spec',
         },
-        src: ['./lib/tests/*.js']
+        src: ['Lib/tests/*.js']
       }
     }
   });
