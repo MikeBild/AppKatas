@@ -1,4 +1,4 @@
-var Calculator = require("../lib/src/calc").Calc;
+var Calculator = require("./../lib/src/calc").Calc;
 
 Calculator.fsm.emit({type:"reseted", data: {}});
 Calculator.fsm.emit({type:"enteredNumber", data: {number:"3"}});
