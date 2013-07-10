@@ -1,4 +1,5 @@
 Calculator Kata
+[![Build Status](https://travis-ci.org/MikeBild/AppKatas.png?branch=master)](https://travis-ci.org/MikeBild/AppKatas)
 ====
 Lib - mixed Browser & Node.js module + Event-Sourcing sample
 ----
