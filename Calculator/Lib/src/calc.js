@@ -183,4 +183,4 @@ var ES = require('./es').ES;
 			}
 		});
 	};
-})(exports.Calc = {});
+})(typeof exports !== 'undefined' ? exports.Calc = {} : window.Calc = {});
