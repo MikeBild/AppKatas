@@ -1,9 +1,8 @@
-Calculator Kata
 [![Build Status](https://travis-ci.org/MikeBild/AppKatas.png?branch=master)](https://travis-ci.org/MikeBild/AppKatas)
+Calculator Kata
 ====
 Lib - mixed Browser & Node.js module + Event-Sourcing sample
 ----
-Tests  
 `cd Calculator`  
 `npm install`  
 `npm test` 
