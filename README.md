@@ -4,9 +4,8 @@ Lib - mixed Browser & Node.js module + Event-Sourcing sample
 ----
 Tests  
 `cd Calculator`  
-`npm install mocha grunt grunt-mocha-test`  
-`grunt`  
-
+`npm install`  
+`npm test` 
 
 -
 TicTacToe Kata
