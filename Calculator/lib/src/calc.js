@@ -8,7 +8,7 @@ var ES = require('./es').ES;
 		return fsm.when({
 			$init: {
 				expression: "",
-				result:"",
+				result: 0,
 			},
 			enteredNumber: function(state, event){
 				state.expression += event.number + " ";
@@ -24,7 +24,7 @@ var ES = require('./es').ES;
 			},
 			reseted: function(state, event){
 				state.expression = "";
-				state.result = "";
+				state.result = 0;
 				return state;
 			}
 		});
@@ -58,7 +58,7 @@ var ES = require('./es').ES;
 					case "-": rpn.unshift(l-r); break;
 				}
 			}
-			state.result = rpn[0];
+			state.result = rpn.indexOf(null) !== -1 ? NaN : rpn[0];
 		};
 
 		return fsm.when({
@@ -155,8 +155,8 @@ var ES = require('./es').ES;
 						break;
 					}
 				}
-			}while(rpn.length > 1);
-			state.result = rpn[0];
+			}while(rpn.indexOf(null) === -1 && rpn.length > 1);
+			state.result = rpn.indexOf(null) !== -1 ? NaN : rpn[0];
 		};
 
 		return fsm.when({
